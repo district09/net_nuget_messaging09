@@ -1,0 +1,18 @@
+<?xml version="1.0"?> 
+<settings>
+    <mirrors>
+        <mirror>
+            <id>district09_nexus</id>
+            <name>District09 Repository Manager</name>
+            <url>https://nexussfqa.gent.be/repository/maven-public/</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+    <servers>
+        <server>
+            <id>district09_nexus</id>
+            <username>${env.NEXUS_USER}</username>
+            <password>${env.NEXUS_PASSWORD}</password>
+        </server>
+    </servers>
+</settings>
