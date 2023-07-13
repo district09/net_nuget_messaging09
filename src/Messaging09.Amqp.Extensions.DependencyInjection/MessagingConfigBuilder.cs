@@ -75,7 +75,7 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
     public IMessagingConfigBuilder WithPublisherForType<TMessageType, TSerializerType>() where TMessageType : class
         where TSerializerType : class, IMessageSerializer<TMessageType>
     {
-        Services.AddScoped<IMessagePublisher<TMessageType>, MessagePublisher<TMessageType>>();
+        Services.AddScoped<IMessagePublisher<TMessageType>, CorrelatedMessagePublisher<TMessageType>>();
         return WithSerializer<TMessageType, TSerializerType>();
     }
 

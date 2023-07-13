@@ -12,6 +12,7 @@
         <PackageTags>activemq, amqp, amq, messaging</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
