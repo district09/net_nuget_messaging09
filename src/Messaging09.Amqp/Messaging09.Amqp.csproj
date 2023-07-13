@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageProjectUrl>https://github.com/district09/net_nuget_messaging09</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/district09/net_nuget_messaging09/blob/main/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/district09/net_nuget_messaging09</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>activemq, amqp, amq, messaging</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Apache.NMS.AMQP" Version="2.2.0"/>
+    </ItemGroup>
+
+</Project>
