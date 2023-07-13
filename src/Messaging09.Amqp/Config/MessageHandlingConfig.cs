@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Messaging09.Amqp.Config;
+﻿namespace Messaging09.Amqp.Config;
 
 public class MessageHandlingConfig
 {
@@ -9,7 +6,7 @@ public class MessageHandlingConfig
     public MessageOutcome DefaultAck { get; set; } = MessageOutcome.Failed;
     public MessageOutcome UnhandledExceptionAck { get; set; } = MessageOutcome.FailedUndeliverable;
 
-    private Dictionary<Type, MessageOutcome> AckTypeForExceptions { get; init; } = new();
+    private Dictionary<Type, MessageOutcome> AckTypeForExceptions { get; } = new();
 
     public void SetPrefetchPolicy(int concurrentMessages)
     {

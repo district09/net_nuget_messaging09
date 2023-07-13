@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using Apache.NMS;
+﻿using Apache.NMS;
 
-namespace Messaging09.Amqp
+namespace Messaging09.Amqp;
+
+public interface ISessionFactory
 {
-    public interface ISessionFactory
-    {
-        Task<ISession> GetSession();
-    }
+    Task<ISession> GetSession();
 }

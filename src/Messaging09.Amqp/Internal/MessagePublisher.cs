@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Apache.NMS;
+﻿using Apache.NMS;
 using Apache.NMS.Util;
 using Messaging09.Amqp.Serializers;
 using Tracer = Messaging09.Amqp.Tracing.Tracer;

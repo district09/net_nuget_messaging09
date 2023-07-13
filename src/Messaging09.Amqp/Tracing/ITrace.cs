@@ -2,7 +2,7 @@
 
 /// <summary>
 /// The ITrace interface is used internally by ActiveMQ to log messages.
-/// The client aplication may provide an implementation of ITrace if it wishes to
+/// The client application may provide an implementation of ITrace if it wishes to
 /// route messages to a specific destination.
 /// </summary>
 /// <remarks>

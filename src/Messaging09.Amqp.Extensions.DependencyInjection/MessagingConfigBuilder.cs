@@ -1,5 +1,4 @@
 ﻿using Messaging09.Amqp.Config;
-using Messaging09.Amqp.Internal;
 using Messaging09.Amqp.Serializers;
 using Messaging09.Amqp.Serializers.Text;
 using Messaging09.Amqp.Tracing;

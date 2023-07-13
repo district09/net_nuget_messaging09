@@ -12,11 +12,11 @@
         <PackageTags>activemq, amqp, amq, messaging</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Apache.NMS.AMQP" Version="2.2.0"/>
+        <PackageReference Include="Apache.NMS.AMQP" Version="2.2.0" />
     </ItemGroup>
 
 </Project>

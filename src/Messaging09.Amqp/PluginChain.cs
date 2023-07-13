@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Apache.NMS;
+﻿using Apache.NMS;
 using Messaging09.Amqp.Config;
 using Messaging09.Amqp.Plugins;
 

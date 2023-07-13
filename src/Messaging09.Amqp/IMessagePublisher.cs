@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Apache.NMS;
+﻿using Apache.NMS;
 
 namespace Messaging09.Amqp;
 

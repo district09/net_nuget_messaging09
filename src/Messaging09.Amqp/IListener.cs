@@ -1,10 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿namespace Messaging09.Amqp;
 
-namespace Messaging09.Amqp
+public interface IListener
 {
-    public interface IListener
-    {
-        Task StartListening(string destinationName, string? selector = null);
-        Task StopListening();
-    }
+    Task StartListening(string destinationName, string? selector = null);
+    Task StopListening();
 }

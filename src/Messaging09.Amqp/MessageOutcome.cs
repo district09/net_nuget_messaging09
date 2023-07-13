@@ -1,10 +1,9 @@
-﻿namespace Messaging09.Amqp
+﻿namespace Messaging09.Amqp;
+
+public enum MessageOutcome
 {
-    public enum MessageOutcome
-    {
-        Ack,
-        Failed,
-        FailedUndeliverable,
-        Reject
-    }
+    Ack,
+    Failed,
+    FailedUndeliverable,
+    Reject
 }

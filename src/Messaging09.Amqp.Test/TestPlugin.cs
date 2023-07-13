@@ -2,7 +2,6 @@
 using Messaging09.Amqp.Serializers;
 using Messaging09.Amqp.Test.Message;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace Messaging09.Amqp.Test;
 
