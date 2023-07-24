@@ -71,10 +71,11 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
         return WithPublisherForType<TMessageType, JsonTextMessageSerializer<TMessageType>>();
     }
 
-    public IMessagingConfigBuilder WithPublisherForType<TMessageType, TSerializerType>() where TMessageType : class
+    public IMessagingConfigBuilder WithPublisherForType<TMessageType, TSerializerType>()
+        where TMessageType : class
         where TSerializerType : class, IMessageSerializer<TMessageType>
     {
-        Services.AddScoped<IMessagePublisher<TMessageType>, CorrelatedMessagePublisher<TMessageType>>();
+        Services.AddScoped<IMessagePublisher, CorrelatedMessagePublisher>();
         return WithSerializer<TMessageType, TSerializerType>();
     }
 
@@ -92,12 +93,12 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
         return this;
     }
 
-    public IMessagingConfigBuilder WithDotnetLogger(LogLevel level)
+    public IMessagingConfigBuilder WithDotnetLogger()
     {
         var provider = Services.BuildServiceProvider();
-        var logger = provider.GetRequiredService<ILoggerProvider>();
+        var logger = provider.GetRequiredService<ILoggerFactory>();
         var x = logger.CreateLogger(typeof(Tracer).FullName!);
-        Tracer.Trace = new LogTracer(x, level);
+        Tracer.Trace = new LogTracer(x);
         return this;
     }
 }

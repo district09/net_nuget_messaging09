@@ -36,5 +36,5 @@ public interface IMessagingConfigBuilder
     IMessagingConfigBuilder WithMessageHandling(ConfigureMessageHandling? configAction = null);
 
     IMessagingConfigBuilder WithTracer<TTracer>() where TTracer : ITrace, new();
-    IMessagingConfigBuilder WithDotnetLogger(LogLevel level);
+    IMessagingConfigBuilder WithDotnetLogger();
 }

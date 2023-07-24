@@ -14,10 +14,11 @@ public class MyMessageHandler : MessageHandler<MessageViewModel>
         _logger = logger;
     }
 
-    protected override Task<MessageOutcome> Handle(MessageEnvelope<MessageViewModel> envelope)
+    protected override async Task<MessageOutcome> Handle(MessageEnvelope<MessageViewModel> envelope)
     {
-        _logger.LogInformation("message received with count {Count} and description {Description}",
-            envelope.Message.Count, envelope.Message.Description);
-        return Task.FromResult(MessageOutcome.Ack);
+        _logger.LogInformation("message received with count {Count}, correlation: {Correlation}",
+            envelope.Message.Count, envelope.Original.NMSCorrelationID);
+        //await Task.Delay(1000);
+        return MessageOutcome.Ack;
     }
 }

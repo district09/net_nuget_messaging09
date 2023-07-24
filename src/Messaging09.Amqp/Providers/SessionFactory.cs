@@ -2,6 +2,7 @@
 using Apache.NMS.AMQP;
 using Apache.NMS.AMQP.Meta;
 using Messaging09.Amqp.Config;
+using Tracer = Messaging09.Amqp.Tracing.Tracer;
 
 namespace Messaging09.Amqp.Providers;
 
@@ -57,12 +58,13 @@ public class SessionFactory : ISessionFactory, IDisposable
         var connection =
             await connectionFactory.CreateConnectionAsync(_options.Username,
                 _options.Password);
+        Tracer.DebugFormat("starting amqp connection to {0}", _options.Uri);
         await connection.StartAsync();
         var session = await connection.CreateSessionAsync(AcknowledgementMode.IndividualAcknowledge);
         unregisterTOken.Unregister();
         return session;
     }
-    
+
     private void Dispose(bool disposing)
     {
         if (!disposing) return;

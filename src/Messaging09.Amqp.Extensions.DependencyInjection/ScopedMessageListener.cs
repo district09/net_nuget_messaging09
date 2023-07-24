@@ -63,7 +63,7 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
         }
         finally
         {
-            _logger.LogInformation("Acking with {AckType}", outcome);
+            Tracer.InfoFormat("Acking with {0}", outcome);
             SetMessageAckType(outcome, message);
             await message.AcknowledgeAsync();
         }

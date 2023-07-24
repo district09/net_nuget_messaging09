@@ -2,7 +2,7 @@
 
 namespace Messaging09.Amqp;
 
-public interface IMessagePublisher<in TMessageType>
+public interface IMessagePublisher
 {
-    Task SendMessage(TMessageType message, string fqdn, Action<IMessage>? messageTransform = null);
+    Task SendMessage<TMessageType>(TMessageType message, string queue, Action<IMessage>? messageTransform = null);
 }
