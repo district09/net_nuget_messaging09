@@ -27,3 +27,7 @@ Pop-Location
 Write-Progress "Moving packages to $distPath folder"
 
 dir -Path . -Filter *.nupkg -Recurse | %{ Move-Item $_.FullName $distPath }
+
+Write-Progress "Moving debug symbols to $distPath folder"
+
+dir -Path . -Filter *.snupkg -Recurse | %{ Move-Item $_.FullName $distPath }
