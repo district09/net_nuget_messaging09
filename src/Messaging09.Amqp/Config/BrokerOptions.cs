@@ -7,4 +7,5 @@ public class BrokerOptions
     public string Username { get; set; }
     public string Password { get; set; }
     public int TimeoutSeconds { get; set; }
+    public int PrefetchPolicy { get; set; } = 2;
 }
