@@ -28,10 +28,3 @@ Install-Package Messaging09.Amqp.Extensions.DependencyInjection
 ```bash
 dotnet add package Messaging09.Amqp.Extensions.DependencyInjection
 ```
-
-* installing
-* initializing
-* publishing
-* consuming
-* serializing
-* plugins
