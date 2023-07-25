@@ -20,7 +20,8 @@ dotnet restore
 
 Write-Progress "Building packages"
 
-dotnet build --configuration Release
+dotnet build --configuration Release /p:ContinuousIntegrationBuild=true
+dotnet pack --configuration Release /p:ContinuousIntegrationBuild=true
 
 Pop-Location
 
@@ -31,3 +32,5 @@ dir -Path . -Filter *.nupkg -Recurse | %{ Move-Item $_.FullName $distPath }
 Write-Progress "Moving debug symbols to $distPath folder"
 
 dir -Path . -Filter *.snupkg -Recurse | %{ Move-Item $_.FullName $distPath }
+
+Remove-Item -Path "./$distPath/Messaging09.1.0.0.nupkg"
