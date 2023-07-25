@@ -2,16 +2,9 @@
 
 public class MessageHandlingConfig
 {
-    internal int PrefetchPolicy = 2;
     public MessageOutcome DefaultAck { get; set; } = MessageOutcome.Failed;
     public MessageOutcome UnhandledExceptionAck { get; set; } = MessageOutcome.FailedUndeliverable;
-
     private Dictionary<Type, MessageOutcome> AckTypeForExceptions { get; } = new();
-
-    public void SetPrefetchPolicy(int concurrentMessages)
-    {
-        PrefetchPolicy = concurrentMessages;
-    }
 
     public void AddKnownException<TExceptionType>(MessageOutcome outcome)
     {

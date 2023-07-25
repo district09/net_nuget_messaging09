@@ -13,10 +13,10 @@ public class SessionFactory : ISessionFactory, IDisposable
     private ISession? _session;
     private readonly int _prefetchPolicy;
 
-    public SessionFactory(BrokerOptions options, MessageHandlingConfig messageHandlingConfig)
+    public SessionFactory(BrokerOptions options)
     {
         _options = options;
-        _prefetchPolicy = messageHandlingConfig.PrefetchPolicy;
+        _prefetchPolicy = options.PrefetchPolicy;
     }
 
     public async Task<ISession> GetSession()

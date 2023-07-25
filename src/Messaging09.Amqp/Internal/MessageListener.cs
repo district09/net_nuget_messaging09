@@ -11,14 +11,14 @@ public sealed class MessageListener<TMessageType> : IListener, IDisposable
 {
     private readonly ISessionFactory _sessionFactory;
     private readonly MessageHandlingConfig _config;
-    private readonly MessagingPlugin _pluginChain;
+    private readonly PluginChain _pluginChain;
     private readonly MessageHandler<TMessageType> _handler;
     private IMessageConsumer? _consumer;
 
     public MessageListener(
         ISessionFactory sessionFactory,
         MessageHandlingConfig config,
-        MessagingPlugin pluginChain,
+        PluginChain pluginChain,
         MessageHandler<TMessageType> handler)
     {
         _sessionFactory = sessionFactory;
