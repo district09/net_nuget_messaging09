@@ -25,4 +25,13 @@
       <ProjectReference Include="..\Messaging09.Amqp\Messaging09.Amqp.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Serializers\xmlData\1.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Serializers\xmlData\no_declaration.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

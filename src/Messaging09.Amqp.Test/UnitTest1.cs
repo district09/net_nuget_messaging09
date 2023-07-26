@@ -5,8 +5,8 @@ namespace Messaging09.Amqp.Test;
 
 public class UnitTest1
 {
-    private ITestOutputHelper _outputHelper;
-    private TestMessageFactory _messageFactory = new();
+    private readonly ITestOutputHelper _outputHelper;
+    private readonly TestMessageFactory _messageFactory = new();
 
     public UnitTest1(ITestOutputHelper outputHelper)
     {
