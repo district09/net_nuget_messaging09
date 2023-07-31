@@ -16,26 +16,27 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ISessionFactory _sessionFactory;
     private readonly MessageHandlingConfig _messageHandlingConfig;
+    private readonly string _queue;
     private IMessageConsumer? _consumer;
 
-    public ScopedMessageListener(
-        ILogger<ScopedMessageListener<TMessageType>> logger,
+    public ScopedMessageListener(ILogger<ScopedMessageListener<TMessageType>> logger,
         IServiceScopeFactory scopeFactory,
         ISessionFactory sessionFactory,
-        MessageHandlingConfig messageHandlingConfig)
+        MessageHandlingConfig messageHandlingConfig, string queue)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
         _sessionFactory = sessionFactory;
         _messageHandlingConfig = messageHandlingConfig;
+        _queue = queue;
     }
 
-    public async Task StartListening(string destinationName, string? selector = null)
+    public async Task StartListening(string? selector = null)
     {
         var session = await _sessionFactory.GetSession();
-        var destination = SessionUtil.GetDestination(session, destinationName);
+        var destination = SessionUtil.GetDestination(session, _queue);
         _consumer = await session.CreateConsumerAsync(destination, selector);
-        if (_consumer == null) throw new Exception($"could not create consumer for {destinationName}");
+        if (_consumer == null) throw new Exception($"could not create consumer for {_queue}");
         _consumer.Listener += HandleMessage;
     }
 

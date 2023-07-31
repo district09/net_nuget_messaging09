@@ -20,6 +20,9 @@ public static class ServiceCollectionExtensions
             return new PluginChain(plugins, provider.GetRequiredService<MessageHandlingConfig>());
         });
         services.AddScoped<CorrelationContextAccessor>();
+
+        services.AddSingleton<ListenerFactory>(provider => new ListenerFactory(provider));
+
         return new MessagingConfigBuilder(services);
     }
 }

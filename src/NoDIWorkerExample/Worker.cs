@@ -39,12 +39,12 @@ public class Worker : BackgroundService
         var handler = new CustomHandler(new JsonTextMessageSerializer<PingMessage>());
 
         var listener = new MessageListener<PingMessage>(sessionFactory, messageHandlingConfig,
-            new PluginChain(Array.Empty<MessagingPlugin>(), messageHandlingConfig), handler);
+            new PluginChain(Array.Empty<MessagingPlugin>(), messageHandlingConfig), handler, "some.queue");
 
         var publisher = new MessagePublisher(sessionFactory,
             new PluginChain(Array.Empty<MessagingPlugin>(), messageHandlingConfig),
             new JsonTextMessageSerializer<PingMessage>());
-        
-        await listener.StartListening("some.queue");
+
+        await listener.StartListening();
     }
 }

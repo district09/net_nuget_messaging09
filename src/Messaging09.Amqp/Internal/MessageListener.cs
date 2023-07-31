@@ -13,26 +13,29 @@ public sealed class MessageListener<TMessageType> : IListener, IDisposable
     private readonly MessageHandlingConfig _config;
     private readonly PluginChain _pluginChain;
     private readonly MessageHandler<TMessageType> _handler;
+    private readonly string _queue;
     private IMessageConsumer? _consumer;
 
     public MessageListener(
         ISessionFactory sessionFactory,
         MessageHandlingConfig config,
         PluginChain pluginChain,
-        MessageHandler<TMessageType> handler)
+        MessageHandler<TMessageType> handler,
+        string queue)
     {
         _sessionFactory = sessionFactory;
         _config = config;
         _pluginChain = pluginChain;
         _handler = handler;
+        _queue = queue;
     }
 
-    public async Task StartListening(string destinationName, string? selector = null)
+    public async Task StartListening(string? selector = null)
     {
         var session = await _sessionFactory.GetSession();
-        var destination = SessionUtil.GetDestination(session, destinationName);
+        var destination = SessionUtil.GetDestination(session, _queue);
         _consumer = await session.CreateConsumerAsync(destination, selector);
-        if (_consumer == null) throw new Exception($"could not create consumer for {destinationName}");
+        if (_consumer == null) throw new Exception($"could not create consumer for {_queue}");
         _consumer.Listener += HandleMessage;
     }
 

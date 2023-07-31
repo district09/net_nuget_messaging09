@@ -33,20 +33,11 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
     {
         Services.AddScoped<MessageHandler<TMessageType>, THandlerType>();
 
-        Services.AddSingleton(provider =>
-        {
-            var logger = provider.GetRequiredService<ILogger<ScopedMessageListener<TMessageType>>>();
-            var scopeF = provider.GetRequiredService<IServiceScopeFactory>();
-            var sessionFactory = provider.GetRequiredService<ISessionFactory>();
-            var config = provider.GetRequiredService<MessageHandlingConfig>();
-            return new ScopedMessageListener<TMessageType>(logger, scopeF, sessionFactory, config);
-        });
-
         Services.AddSingleton<IHostedService>(provider =>
         {
-            var logger = provider.GetRequiredService<ILogger<ListenerHostedService>>();
-            var listener = provider.GetRequiredService<ScopedMessageListener<TMessageType>>();
-            return new ListenerHostedService(logger, listener, fqdn);
+            var logger = provider.GetRequiredService<ILogger<ListenerHostedService<TMessageType>>>();
+            var listenerFactory = provider.GetRequiredService<ListenerFactory>();
+            return new ListenerHostedService<TMessageType>(logger, listenerFactory, fqdn);
         });
         return WithSerializer<TMessageType, TSerializerType>();
     }

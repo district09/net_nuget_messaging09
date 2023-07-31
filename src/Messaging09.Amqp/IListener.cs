@@ -2,6 +2,6 @@
 
 public interface IListener
 {
-    Task StartListening(string destinationName, string? selector = null);
+    Task StartListening(string? selector = null);
     Task StopListening();
 }

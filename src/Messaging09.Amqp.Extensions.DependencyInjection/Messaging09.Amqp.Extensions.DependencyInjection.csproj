@@ -14,15 +14,15 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <PackageIconUrl>https://district09.gent/themes/custom/district09/build/img/svg/logo.svg</PackageIconUrl>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     </ItemGroup>
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Messaging09.Amqp\Messaging09.Amqp.csproj"/>
+        <ProjectReference Include="..\Messaging09.Amqp\Messaging09.Amqp.csproj" />
     </ItemGroup>
 </Project>
