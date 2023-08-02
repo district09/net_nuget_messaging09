@@ -5,20 +5,20 @@ namespace Messaging09.Amqp.Exceptions;
 [Serializable]
 public class BrokerConnectionException : Exception
 {
-    private readonly string? _host;
-    private readonly int _seconds;
+    public override string Message => $"Could not connect to {Host} in {TimeoutSeconds} seconds";
+    public string? Host { get; }
+    public int TimeoutSeconds { get; }
 
     protected BrokerConnectionException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
-        _host = info.GetString("host");
-        _seconds = info.GetInt32("timeoutSeconds");
+        Host = info.GetString("host");
+        TimeoutSeconds = info.GetInt32("timeoutSeconds");
     }
 
-    public BrokerConnectionException(string host, int seconds) : base(
-        $"Could not connect to {host} in {seconds} seconds")
+    public BrokerConnectionException(string host, int seconds)
     {
-        _host = host;
-        _seconds = seconds;
+        Host = host;
+        TimeoutSeconds = seconds;
     }
 
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -28,8 +28,8 @@ public class BrokerConnectionException : Exception
             throw new ArgumentNullException(nameof(info));
         }
 
-        info.AddValue("host", _host);
-        info.AddValue("timeoutSeconds", _seconds);
+        info.AddValue("host", Host);
+        info.AddValue("timeoutSeconds", TimeoutSeconds);
         base.GetObjectData(info, context);
     }
 }
