@@ -25,7 +25,8 @@ public class TestController : ControllerBase
     {
         _contextAccessor.CorrelationId = Guid.Empty.ToString("B");
         var msg = new MessageViewModel() { Count = 1, Description = "Hello World111" };
-        await _messagePublisher.SendMessage(msg, "some.queue",
+        _logger.LogInformation("sending message");
+        await _messagePublisher.SendMessage(msg, "topic://VirtualTopic.some.topic",
             message => message.Properties.SetString("Hello", "World"));
         return Ok("OK");
     }

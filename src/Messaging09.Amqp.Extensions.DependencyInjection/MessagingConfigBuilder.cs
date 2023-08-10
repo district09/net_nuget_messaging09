@@ -2,6 +2,7 @@
 using Messaging09.Amqp.Serializers;
 using Messaging09.Amqp.Serializers.Text;
 using Messaging09.Amqp.Tracing;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -86,10 +87,12 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
 
     public IMessagingConfigBuilder WithDotnetLogger()
     {
-        var provider = Services.BuildServiceProvider();
-        var logger = provider.GetRequiredService<ILoggerFactory>();
-        var x = logger.CreateLogger(typeof(Tracer).FullName!);
-        Tracer.Trace = new LogTracer(x);
+        // var provider = Services.BuildServiceProvider();
+        Services.AddTransient<IStartupFilter, LogStartupFilter>();
+        //Services.AddHostedService<LogHostedService>(e => new LogHostedService(e.GetRequiredService<ILogger<ITrace>>()));
+        // var logger = provider.GetRequiredService<ILoggerFactory>();
+        // var x = logger.CreateLogger(typeof(Tracer).FullName!);
+        // Tracer.Trace = new LogTracer(x);
         return this;
     }
 }

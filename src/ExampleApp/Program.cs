@@ -5,12 +5,11 @@ using Messaging09.Amqp.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLogging();
 
 builder.Services.AddControllers();
 
 builder.Services.AddAmqp(builder.Configuration)
-    .WithListener<MessageViewModel, MyMessageHandler>("some.queue")
+    .WithListener<MessageViewModel, MyMessageHandler>("VirtualTopic.some.topic::Consumer.VirtualTopic.some.topic")
     .WithPublisherForType<MessageViewModel>()
     .WithDotnetLogger()
     .WithMessageHandling(e =>

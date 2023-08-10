@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Messaging09.Amqp.Extensions.DependencyInjection\Messaging09.Amqp.Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\Messaging09.Amqp.Extensions.DependencyInjection\Messaging09.Amqp.Extensions.DependencyInjection.csproj"/>
     </ItemGroup>
-
 </Project>
