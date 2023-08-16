@@ -1,0 +1,33 @@
+﻿{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:36085",
+      "sslPort": 44306
+    }
+  },
+  "profiles": {
+    "TracingExample": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:7010;http://localhost:5066",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ELASTIC_APM_SERVICE_NAME": "TracingExampleApp",
+        "ELASTIC_APM_ENABLED": "true",
+        "ELASTIC_APM_ENVIRONMENT": "DV",
+        "ELASTIC_APM_SERVER_URL": "http://localhost:8200",
+        "ELASTIC_APM_OPENTELEMETRY_BRIDGE_ENABLED": "true"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

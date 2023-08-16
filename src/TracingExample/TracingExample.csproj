@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Messaging09.Amqp.Extensions.DependencyInjection\Messaging09.Amqp.Extensions.DependencyInjection.csproj" />
+      <ProjectReference Include="..\Messaging09.Amqp.Tracing\Messaging09.Amqp.Tracing.csproj" />
+    </ItemGroup>
+
+
+
+
+    <ItemGroup>
+      <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.23.0" />
+    </ItemGroup>
+
+</Project>
