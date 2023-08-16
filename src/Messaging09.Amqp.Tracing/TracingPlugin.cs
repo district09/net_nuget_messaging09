@@ -31,7 +31,7 @@ public class TracingPlugin : MessagingPlugin
         }
 
         using var activity = _actSource.StartActivity(
-            nameof(HandleInbound),
+            $"Message received: {handler.GetType().Name}",
             ActivityKind.Consumer,
             parent,
             new KeyValuePair<string, object?>[]
@@ -46,7 +46,7 @@ public class TracingPlugin : MessagingPlugin
 
     public override async Task<IMessage> HandleOutbound(IMessage message, IDestination fqdn)
     {
-        using var activity = _actSource.StartActivity(nameof(HandleOutbound), ActivityKind.Producer);
+        using var activity = _actSource.StartActivity($"Send message to {fqdn}", ActivityKind.Producer);
 
         message.Properties.SetString(PARENT_SPAN_ID_KEY, activity?.SpanId.ToHexString());
         message.Properties.SetString(PARENT_TRACE_ID_KEY, activity?.TraceId.ToHexString());
