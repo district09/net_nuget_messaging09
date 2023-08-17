@@ -22,13 +22,14 @@ public class SessionFactory : ISessionFactory, IDisposable
 
     public async Task<ISession> GetSession()
     {
-        await SemaphoreSlim.WaitAsync();
-        if (_session != null)
-        {
-            return _session;
-        }
         try
         {
+            await SemaphoreSlim.WaitAsync();
+            if (_session != null)
+            {
+                return _session;
+            }
+
             _session = await CreateSession();
         }
         finally
