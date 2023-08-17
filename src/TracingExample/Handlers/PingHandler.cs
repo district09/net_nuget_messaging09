@@ -20,8 +20,9 @@ public class PingHandler : MessageHandler<PingMessage>
 
     protected override async Task<MessageOutcome> Handle(MessageEnvelope<PingMessage> envelope)
     {
+        _logger.LogInformation("received pingmessage with count {Count}", envelope.Message.PingCount);
         if (envelope.Message.PingCount >= 10) return MessageOutcome.Ack;
-        
+
         var client = _clientFactory.CreateClient();
         var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "http://example.org"));
         _logger.LogInformation("Received a {Status} status code from http call", response.StatusCode);

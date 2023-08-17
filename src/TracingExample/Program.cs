@@ -1,4 +1,5 @@
 using Elastic.Apm.NetCoreAll;
+using Elastic.Extensions.Logging;
 using Messaging09.Amqp;
 using Messaging09.Amqp.Extensions.DependencyInjection.Extensions;
 using Messaging09.Amqp.Tracing;
@@ -8,6 +9,11 @@ using TracingExample.Viewmodels;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseAllElasticApm();
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddElasticsearch();
+});
 
 builder.Services.AddAmqp(builder.Configuration)
     .WithPlugin<TracingPlugin>()
