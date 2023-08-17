@@ -10,7 +10,7 @@ namespace Messaging09.Amqp.Providers;
 public class SessionFactory : ISessionFactory, IDisposable
 {
     private readonly BrokerOptions _options;
-    private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
+    private static readonly SemaphoreSlim SemaphoreSlim = new(1, 1);
     private ISession? _session;
     private readonly int _prefetchPolicy;
 
@@ -27,14 +27,14 @@ public class SessionFactory : ISessionFactory, IDisposable
             return _session;
         }
 
-        await _semaphoreSlim.WaitAsync();
+        await SemaphoreSlim.WaitAsync();
         try
         {
             _session = await CreateSession();
         }
         finally
         {
-            _semaphoreSlim.Release();
+            SemaphoreSlim.Release();
         }
 
         return _session;
@@ -80,7 +80,7 @@ public class SessionFactory : ISessionFactory, IDisposable
     private void Dispose(bool disposing)
     {
         if (!disposing) return;
-        _semaphoreSlim.Dispose();
+        SemaphoreSlim.Dispose();
         _session?.Dispose();
     }
 
