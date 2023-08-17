@@ -26,6 +26,7 @@ public class PingHandler : MessageHandler<PingMessage>
         var client = _clientFactory.CreateClient();
         var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "http://example.org"));
         _logger.LogInformation("Received a {Status} status code from http call", response.StatusCode);
+        await Task.Delay(500);
         await _publisher.SendMessage(new PongMessage() { PingCount = envelope.Message.PingCount + 1 },
             "pong.queue");
 

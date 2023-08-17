@@ -87,12 +87,7 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
 
     public IMessagingConfigBuilder WithDotnetLogger()
     {
-        // var provider = Services.BuildServiceProvider();
         Services.AddTransient<IStartupFilter, LogStartupFilter>();
-        //Services.AddHostedService<LogHostedService>(e => new LogHostedService(e.GetRequiredService<ILogger<ITrace>>()));
-        // var logger = provider.GetRequiredService<ILoggerFactory>();
-        // var x = logger.CreateLogger(typeof(Tracer).FullName!);
-        // Tracer.Trace = new LogTracer(x);
         return this;
     }
 }

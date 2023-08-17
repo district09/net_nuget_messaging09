@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddAmqp(builder.Configuration)
-    .WithPlugin<TracingPlugin>()
     .WithListener<MessageViewModel, MyMessageHandler>("VirtualTopic.some.topic::Consumer.VirtualTopic.some.topic")
     .WithPublisherForType<MessageViewModel>()
     .WithDotnetLogger()

@@ -1,4 +1,5 @@
-﻿using Apache.NMS;
+﻿using System.Diagnostics;
+using Apache.NMS;
 using Apache.NMS.Util;
 using Messaging09.Amqp.Serializers;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ public class CorrelatedMessagePublisher : IMessagePublisher
     private readonly PluginChain _pluginChain;
     private readonly CorrelationContextAccessor _contextAccessor;
     private readonly IServiceProvider _provider;
+    private readonly ActivitySource _actSource = new("Messaging");
 
     public CorrelatedMessagePublisher(ISessionFactory sessionFactory,
         PluginChain pluginChain,
@@ -33,6 +35,17 @@ public class CorrelatedMessagePublisher : IMessagePublisher
         var serializer = _provider.GetRequiredService<IMessageSerializer<TMessageType>>();
 
         var outboundMessage = serializer.Serialize(message, session);
+
+        using var activity = _actSource.StartActivity($"Send message to {queue}", ActivityKind.Producer,
+            default(ActivityContext), new KeyValuePair<string, object?>[]
+            {
+                new("messaging.system", "Amqp"),
+                new("messaging.destination", queue)
+            });
+
+        outboundMessage.Properties.SetString(Constants.PARENT_SPAN_ID_KEY, activity?.SpanId.ToHexString());
+        outboundMessage.Properties.SetString(Constants.PARENT_TRACE_ID_KEY, activity?.TraceId.ToHexString());
+
         outboundMessage.NMSCorrelationID = _contextAccessor.CorrelationId;
         messageTransform?.Invoke(outboundMessage);
         var msg = await _pluginChain.HandleOutbound(outboundMessage, dest);

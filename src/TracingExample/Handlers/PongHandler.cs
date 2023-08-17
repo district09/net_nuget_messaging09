@@ -21,11 +21,10 @@ public class PongHandler : MessageHandler<PongMessage>
     protected override async Task<MessageOutcome> Handle(MessageEnvelope<PongMessage> envelope)
     {
         _logger.LogInformation("received pongmessage with count {Count}", envelope.Message.PingCount);
-        if (envelope.Message.PingCount < 10)
-        {
-            await _publisher.SendMessage(new PingMessage() { PingCount = envelope.Message.PingCount + 1 },
-                "ping.queue");
-        }
+        if (envelope.Message.PingCount >= 10) return MessageOutcome.Ack;
+        await Task.Delay(500);
+        await _publisher.SendMessage(new PingMessage() { PingCount = envelope.Message.PingCount + 1 },
+            "ping.queue");
 
         return MessageOutcome.Ack;
     }
