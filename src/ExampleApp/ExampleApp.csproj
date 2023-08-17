@@ -8,6 +8,5 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Messaging09.Amqp.Extensions.DependencyInjection\Messaging09.Amqp.Extensions.DependencyInjection.csproj"/>
-        <ProjectReference Include="..\Messaging09.Amqp.Tracing\Messaging09.Amqp.Tracing.csproj" />
     </ItemGroup>
 </Project>

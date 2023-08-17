@@ -16,7 +16,6 @@ builder.Services.AddLogging(loggingBuilder =>
 });
 
 builder.Services.AddAmqp(builder.Configuration)
-    .WithPlugin<TracingPlugin>()
     .WithListener<PingMessage, PingHandler>("ping.queue")
     .WithListener<PongMessage, PongHandler>("pong.queue")
     .WithDotnetLogger()

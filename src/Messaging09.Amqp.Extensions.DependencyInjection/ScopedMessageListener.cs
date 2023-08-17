@@ -1,8 +1,8 @@
-﻿using Apache.NMS;
+﻿using System.Diagnostics;
+using Apache.NMS;
 using Apache.NMS.AMQP.Message;
 using Apache.NMS.Util;
 using Messaging09.Amqp.Config;
-using Messaging09.Amqp.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tracer = Messaging09.Amqp.Tracing.Tracer;
@@ -18,6 +18,7 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
     private readonly MessageHandlingConfig _messageHandlingConfig;
     private readonly string _queue;
     private IMessageConsumer? _consumer;
+    private ActivitySource _actSource = new("Messaging");
 
     public ScopedMessageListener(ILogger<ScopedMessageListener<TMessageType>> logger,
         IServiceScopeFactory scopeFactory,
@@ -45,15 +46,18 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
         var outcome = _messageHandlingConfig.DefaultAck;
         using var scope = _scopeFactory.CreateScope();
         var correlationContextAccessor = scope.ServiceProvider.GetRequiredService<CorrelationContextAccessor>();
+        var handler = scope.ServiceProvider.GetRequiredService<MessageHandler<TMessageType>>();
+        var pluginChain = new PluginChain(scope.ServiceProvider.GetRequiredService<IEnumerable<MessagingPlugin>>(),
+            _messageHandlingConfig);
+
+        using var activity = StartActivity(message, handler.GetType().Name);
+
         correlationContextAccessor.CorrelationId = message.NMSCorrelationID ?? Guid.NewGuid().ToString("D");
         using var correlationScope = _logger.BeginScope(new Dictionary<string, object>
             { { "CorrelationId", correlationContextAccessor.CorrelationId } });
         try
         {
-            var handler = scope.ServiceProvider.GetRequiredService<MessageHandler<TMessageType>>();
-
-            var pluginChain = GetPluginChain(scope);
-
+            // Tracer.InfoFormat("received message on {0}, executing handler", _queue);
             outcome = await pluginChain.HandleInbound(message, handler);
         }
         catch (Exception e)
@@ -70,20 +74,6 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
         }
     }
 
-    private MessagingPlugin GetPluginChain(IServiceScope scope)
-    {
-        var plugins = scope.ServiceProvider.GetRequiredService<IEnumerable<MessagingPlugin>>();
-
-        var first = new ErrorHandlingPlugin(_messageHandlingConfig);
-
-        foreach (var plugin in plugins)
-        {
-            first.SetNext(plugin);
-        }
-
-        return first;
-    }
-
     private static void SetMessageAckType(MessageOutcome outcome, IMessage message)
     {
         message.Properties["NMS_AMQP_ACK_TYPE"] = outcome switch
@@ -94,6 +84,34 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
             MessageOutcome.Reject => AckType.REJECTED,
             _ => throw new ArgumentOutOfRangeException(nameof(outcome))
         };
+    }
+
+    private Activity? StartActivity(IMessage message, string handlerName)
+    {
+        var parentTraceId = message.Properties.Contains(Constants.PARENT_TRACE_ID_KEY)
+            ? message.Properties.GetString(Constants.PARENT_TRACE_ID_KEY)
+            : "";
+        var parentSpanId = message.Properties.Contains(Constants.PARENT_SPAN_ID_KEY)
+            ? message.Properties.GetString(Constants.PARENT_SPAN_ID_KEY)
+            : "";
+
+        ActivityContext parent;
+
+        if (!string.IsNullOrWhiteSpace(parentTraceId) && !string.IsNullOrWhiteSpace(parentSpanId))
+        {
+            parent = new ActivityContext(ActivityTraceId.CreateFromString(parentTraceId),
+                ActivitySpanId.CreateFromString(parentSpanId), ActivityTraceFlags.Recorded, null, true);
+        }
+
+        return _actSource.StartActivity(
+            $"Message received: {handlerName}",
+            ActivityKind.Consumer,
+            parent,
+            new KeyValuePair<string, object?>[]
+            {
+                new("messaging.system", "Amqp"),
+                new("messaging.destination", message.NMSDestination.ToString())
+            });
     }
 
 
