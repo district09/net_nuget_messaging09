@@ -1,10 +1,11 @@
 ﻿namespace Messaging09.Amqp.Config;
 
-public class MessageHandlingConfig
+public class MessagingConfig
 {
     public MessageOutcome DefaultAck { get; set; } = MessageOutcome.Failed;
     public MessageOutcome UnhandledExceptionAck { get; set; } = MessageOutcome.FailedUndeliverable;
     private Dictionary<Type, MessageOutcome> AckTypeForExceptions { get; } = new();
+    public string TopicPrefix { get; set; } = "VirtualTopic.";
 
     public void AddKnownException<TExceptionType>(MessageOutcome outcome)
     {

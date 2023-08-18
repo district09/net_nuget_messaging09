@@ -13,7 +13,7 @@ builder.Services.AddAmqp(builder.Configuration)
     .WithListener<MessageViewModel, MyMessageHandler>("VirtualTopic.some.topic::Consumer.VirtualTopic.some.topic")
     .WithPublisherForType<MessageViewModel>()
     .WithDotnetLogger()
-    .WithMessageHandling(e =>
+    .WithConfig(e =>
     {
         e.DefaultAck = MessageOutcome.Failed;
         e.AddKnownException<ArgumentException>(MessageOutcome.FailedUndeliverable);

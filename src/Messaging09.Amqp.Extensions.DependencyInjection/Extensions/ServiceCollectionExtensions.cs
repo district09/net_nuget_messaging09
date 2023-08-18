@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
         {
             var plugins = provider.GetRequiredService<IEnumerable<MessagingPlugin>>();
 
-            return new PluginChain(plugins, provider.GetRequiredService<MessageHandlingConfig>());
+            return new PluginChain(plugins, provider.GetRequiredService<MessagingConfig>());
         });
         services.AddScoped<CorrelationContextAccessor>();
 

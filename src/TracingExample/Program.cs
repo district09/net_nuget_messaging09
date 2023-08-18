@@ -10,14 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseAllElasticApm();
 
-builder.Services.AddLogging(loggingBuilder =>
-{
-    loggingBuilder.AddElasticsearch();
-});
+builder.Services.AddLogging(loggingBuilder => { loggingBuilder.AddElasticsearch(); });
 
 builder.Services.AddAmqp(builder.Configuration)
     .WithListener<PingMessage, PingHandler>("ping.queue")
-    .WithListener<PongMessage, PongHandler>("pong.queue")
+    .WithListener<PongMessage, PongHandler>("VirtualTopic.some.topic::Consumer.VirtualTopic.some.topic")
     .WithDotnetLogger()
     .WithPublisherForType<PingMessage>()
     .WithPublisherForType<PongMessage>();

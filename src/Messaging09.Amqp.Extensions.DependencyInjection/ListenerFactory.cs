@@ -19,6 +19,6 @@ public class ListenerFactory
             _provider.GetRequiredService<ILogger<ScopedMessageListener<TMessageType>>>(),
             _provider.GetRequiredService<IServiceScopeFactory>(),
             _provider.GetRequiredService<ISessionFactory>(),
-            _provider.GetRequiredService<MessageHandlingConfig>(), queue);
+            _provider.GetRequiredService<MessagingConfig>(), queue);
     }
 }

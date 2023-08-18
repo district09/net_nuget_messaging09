@@ -17,7 +17,7 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
     public MessagingConfigBuilder(IServiceCollection services)
     {
         Services = services;
-        WithMessageHandling(null);
+        WithConfig(null);
     }
 
     public IMessagingConfigBuilder WithListener<TMessageType, THandlerType>(string fqdn)
@@ -71,9 +71,15 @@ public class MessagingConfigBuilder : IMessagingConfigBuilder
         return WithSerializer<TMessageType, TSerializerType>();
     }
 
+    [Obsolete("WithMessageHandling has been renamed to WithConfig for clarity")]
     public IMessagingConfigBuilder WithMessageHandling(ConfigureMessageHandling? configAction = null)
     {
-        var handlingConfig = new MessageHandlingConfig();
+        return WithConfig(configAction);
+    }
+
+    public IMessagingConfigBuilder WithConfig(ConfigureMessageHandling? configAction = null)
+    {
+        var handlingConfig = new MessagingConfig();
         var config = configAction?.Invoke(handlingConfig);
         Services.Replace(ServiceDescriptor.Singleton(config ?? handlingConfig));
         return this;

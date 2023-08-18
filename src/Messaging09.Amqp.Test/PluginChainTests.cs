@@ -23,7 +23,7 @@ public class PluginChainTests
         {
             new TestPlugin(_outputHelper, 5)
         };
-        var config = new MessageHandlingConfig
+        var config = new MessagingConfig
         {
             DefaultAck = MessageOutcome.FailedUndeliverable,
             UnhandledExceptionAck = MessageOutcome.Reject
@@ -45,7 +45,7 @@ public class PluginChainTests
         {
             new TestPlugin(_outputHelper, 5)
         };
-        var config = new MessageHandlingConfig
+        var config = new MessagingConfig
         {
             DefaultAck = MessageOutcome.FailedUndeliverable,
             UnhandledExceptionAck = MessageOutcome.Reject

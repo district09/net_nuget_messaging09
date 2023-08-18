@@ -27,7 +27,7 @@ public class Worker : BackgroundService
             PrefetchPolicy = 1
         };
 
-        var messageHandlingConfig = new MessageHandlingConfig
+        var messageHandlingConfig = new MessagingConfig
         {
             DefaultAck = MessageOutcome.Failed,
             UnhandledExceptionAck = MessageOutcome.FailedUndeliverable

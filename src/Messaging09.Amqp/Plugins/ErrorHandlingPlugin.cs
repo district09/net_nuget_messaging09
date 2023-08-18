@@ -6,9 +6,9 @@ namespace Messaging09.Amqp.Plugins;
 
 public class ErrorHandlingPlugin : MessagingPlugin
 {
-    private readonly MessageHandlingConfig _config;
+    private readonly MessagingConfig _config;
 
-    public ErrorHandlingPlugin(MessageHandlingConfig config)
+    public ErrorHandlingPlugin(MessagingConfig config)
     {
         _config = config;
     }

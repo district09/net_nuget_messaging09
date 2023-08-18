@@ -15,7 +15,7 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
     private readonly ILogger<ScopedMessageListener<TMessageType>> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ISessionFactory _sessionFactory;
-    private readonly MessageHandlingConfig _messageHandlingConfig;
+    private readonly MessagingConfig _messagingConfig;
     private readonly string _queue;
     private IMessageConsumer? _consumer;
     private ActivitySource _actSource = new("Messaging");
@@ -23,12 +23,12 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
     public ScopedMessageListener(ILogger<ScopedMessageListener<TMessageType>> logger,
         IServiceScopeFactory scopeFactory,
         ISessionFactory sessionFactory,
-        MessageHandlingConfig messageHandlingConfig, string queue)
+        MessagingConfig messagingConfig, string queue)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
         _sessionFactory = sessionFactory;
-        _messageHandlingConfig = messageHandlingConfig;
+        _messagingConfig = messagingConfig;
         _queue = queue;
     }
 
@@ -43,12 +43,12 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
 
     private async void HandleMessage(IMessage message)
     {
-        var outcome = _messageHandlingConfig.DefaultAck;
+        var outcome = _messagingConfig.DefaultAck;
         using var scope = _scopeFactory.CreateScope();
         var correlationContextAccessor = scope.ServiceProvider.GetRequiredService<CorrelationContextAccessor>();
         var handler = scope.ServiceProvider.GetRequiredService<MessageHandler<TMessageType>>();
         var pluginChain = new PluginChain(scope.ServiceProvider.GetRequiredService<IEnumerable<MessagingPlugin>>(),
-            _messageHandlingConfig);
+            _messagingConfig);
 
         using var activity = StartActivity(message, handler.GetType().Name);
 
@@ -64,7 +64,7 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
         {
             Tracer.ErrorFormat("unhandled exception in message listener. was not catched by errorHandlingPlugin: {0}",
                 e.ToString());
-            outcome = _messageHandlingConfig.GetOutcomeForException(e);
+            outcome = _messagingConfig.GetOutcomeForException(e);
         }
         finally
         {

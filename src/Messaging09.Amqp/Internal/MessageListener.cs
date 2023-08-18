@@ -10,7 +10,7 @@ public sealed class MessageListener<TMessageType> : IListener, IDisposable
     where TMessageType : class
 {
     private readonly ISessionFactory _sessionFactory;
-    private readonly MessageHandlingConfig _config;
+    private readonly MessagingConfig _config;
     private readonly PluginChain _pluginChain;
     private readonly MessageHandler<TMessageType> _handler;
     private readonly string _queue;
@@ -18,7 +18,7 @@ public sealed class MessageListener<TMessageType> : IListener, IDisposable
 
     public MessageListener(
         ISessionFactory sessionFactory,
-        MessageHandlingConfig config,
+        MessagingConfig config,
         PluginChain pluginChain,
         MessageHandler<TMessageType> handler,
         string queue)

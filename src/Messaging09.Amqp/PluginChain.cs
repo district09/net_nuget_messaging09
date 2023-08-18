@@ -8,7 +8,7 @@ public class PluginChain
 {
     private readonly MessagingPlugin _first;
 
-    public PluginChain(IEnumerable<MessagingPlugin> plugins, MessageHandlingConfig config)
+    public PluginChain(IEnumerable<MessagingPlugin> plugins, MessagingConfig config)
     {
         _first = new ErrorHandlingPlugin(config);
         foreach (var plugin in plugins)

@@ -28,7 +28,7 @@ public class PingHandler : MessageHandler<PingMessage>
         _logger.LogInformation("Received a {Status} status code from http call", response.StatusCode);
         await Task.Delay(500);
         await _publisher.SendMessage(new PongMessage() { PingCount = envelope.Message.PingCount + 1 },
-            "pong.queue");
+            "VirtualTopic.some.topic::Consumer.VirtualTopic.some.topic");
 
         return MessageOutcome.Ack;
     }

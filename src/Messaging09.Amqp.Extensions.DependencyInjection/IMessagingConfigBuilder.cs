@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Messaging09.Amqp.Extensions.DependencyInjection;
 
-public delegate MessageHandlingConfig ConfigureMessageHandling(MessageHandlingConfig config);
+public delegate MessagingConfig ConfigureMessageHandling(MessagingConfig config);
 
 public interface IMessagingConfigBuilder
 {
@@ -34,6 +34,7 @@ public interface IMessagingConfigBuilder
         where TSerializerType : class, IMessageSerializer<TMessageType>;
 
     IMessagingConfigBuilder WithMessageHandling(ConfigureMessageHandling? configAction = null);
+    IMessagingConfigBuilder WithConfig(ConfigureMessageHandling? configAction = null);
 
     IMessagingConfigBuilder WithTracer<TTracer>() where TTracer : ITrace, new();
     IMessagingConfigBuilder WithDotnetLogger();
