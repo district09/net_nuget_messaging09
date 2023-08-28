@@ -34,7 +34,7 @@ public class TestController : ControllerBase
     [HttpGet("bulk")]
     public async Task<IActionResult> SendMultipleMessages()
     {
-     
+
         for (var i = 0; i < 1000; i++)
         {
             var msg = new MessageViewModel() { Count = i, Description = $"This is message number {i}" };

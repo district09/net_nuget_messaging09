@@ -18,7 +18,6 @@ builder.Services.AddAmqp(builder.Configuration)
     .WithDotnetLogger()
     .WithPublisherForType<PingMessage>()
     .WithPublisherForType<PongMessage>();
-
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
