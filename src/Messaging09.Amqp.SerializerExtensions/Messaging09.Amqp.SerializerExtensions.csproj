@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -16,13 +16,14 @@
         <PackageIconUrl>https://district09.gent/themes/custom/district09/build/img/svg/logo.svg</PackageIconUrl>
         <Version>1.5.3</Version>
     </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+      <ProjectReference Include="..\Messaging09.Amqp.Extensions.DependencyInjection\Messaging09.Amqp.Extensions.DependencyInjection.csproj" />
+      <ProjectReference Include="..\Messaging09.Amqp\Messaging09.Amqp.csproj" />
     </ItemGroup>
+
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+      <PackageReference Include="FluentValidation" Version="11.9.0" />
     </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\Messaging09.Amqp\Messaging09.Amqp.csproj" />
-    </ItemGroup>
+
 </Project>
