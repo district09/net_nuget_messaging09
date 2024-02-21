@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -15,7 +15,7 @@
 
 
     <ItemGroup>
-      <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.23.0" />
+      <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.26.0" />
       <PackageReference Include="Elastic.Extensions.Logging" Version="8.6.1" />
     </ItemGroup>
 
