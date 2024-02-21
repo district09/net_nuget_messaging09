@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using Apache.NMS;
+using Apache.NMS.AMQP;
 using Apache.NMS.AMQP.Message;
+using Apache.NMS.AMQP.Util;
 using Apache.NMS.Util;
 using Messaging09.Amqp.Config;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,8 +55,8 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
     using var activity = StartActivity(message, handler.GetType().Name);
 
     correlationContextAccessor.CorrelationId = message.NMSCorrelationID ?? Guid.NewGuid().ToString("D");
-    using var correlationScope = _logger.BeginScope(new Dictionary<string, object>
-      { { "CorrelationId", correlationContextAccessor.CorrelationId } });
+    using var logScope = SetupLogScope(message);
+
     try
     {
       // Tracer.InfoFormat("received message on {0}, executing handler", _queue);
@@ -73,6 +75,7 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
       await message.AcknowledgeAsync();
     }
   }
+
 
   private static void SetMessageAckType(MessageOutcome outcome, IMessage message)
   {
@@ -126,5 +129,28 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
   public void Dispose()
   {
     _consumer?.Dispose();
+  }
+
+  private MessageLogScope SetupLogScope(IMessage message)
+  {
+    return new MessageLogScope()
+    {
+      MessageLoggerScope = _logger.BeginScope(new Dictionary<string, object>()
+      {
+        { "CorrelationId", message.NMSCorrelationID ?? Guid.NewGuid().ToString("D") },
+        { "MessageType", message.NMSType },
+        { "MessageDestination", message.NMSDestination }
+      })
+    };
+  }
+
+  private class MessageLogScope : IDisposable
+  {
+    public IDisposable? MessageLoggerScope { get; init; }
+
+    public void Dispose()
+    {
+      MessageLoggerScope?.Dispose();
+    }
   }
 }
