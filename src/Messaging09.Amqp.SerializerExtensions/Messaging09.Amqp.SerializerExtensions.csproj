@@ -14,7 +14,7 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <PackageIconUrl>https://district09.gent/themes/custom/district09/build/img/svg/logo.svg</PackageIconUrl>
-        <Version>1.5.3</Version>
+        <Version>1.5.4</Version>
     </PropertyGroup>
 
     <ItemGroup>

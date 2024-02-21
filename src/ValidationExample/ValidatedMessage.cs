@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Messaging09.Amqp.SerializerExtensions;
+using Messaging09.Amqp.SerializerExtensions.FluentValidation;
 
 namespace ValidationExample;
 

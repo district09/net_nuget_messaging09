@@ -1,7 +1,7 @@
 using FluentValidation;
 using Messaging09.Amqp;
 using Messaging09.Amqp.Extensions.DependencyInjection.Extensions;
-using Messaging09.Amqp.SerializerExtensions;
+using Messaging09.Amqp.SerializerExtensions.FluentValidation;
 using ValidationExample;
 
 var builder = WebApplication.CreateBuilder(args);

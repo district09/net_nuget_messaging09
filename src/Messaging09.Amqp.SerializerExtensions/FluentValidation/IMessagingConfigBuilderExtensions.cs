@@ -2,7 +2,7 @@
 using Messaging09.Amqp.Serializers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Messaging09.Amqp.SerializerExtensions;
+namespace Messaging09.Amqp.SerializerExtensions.FluentValidation;
 
 public static class IMessagingConfigBuilderExtensions
 {

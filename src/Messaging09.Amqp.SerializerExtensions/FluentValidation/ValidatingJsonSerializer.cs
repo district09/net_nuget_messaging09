@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Messaging09.Amqp.Serializers.Text;
 
-namespace Messaging09.Amqp.SerializerExtensions;
+namespace Messaging09.Amqp.SerializerExtensions.FluentValidation;
 
 public class ValidatingJsonSerializer<TMessageType> : JsonTextMessageSerializer<TMessageType>
   where TMessageType : IValidatedMessage<TMessageType>
