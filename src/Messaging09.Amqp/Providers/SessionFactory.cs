@@ -1,6 +1,7 @@
 ﻿using Apache.NMS;
 using Apache.NMS.AMQP;
 using Apache.NMS.AMQP.Meta;
+using Apache.NMS.Policies;
 using Messaging09.Amqp.Config;
 using Messaging09.Amqp.Exceptions;
 using Tracer = Messaging09.Amqp.Tracing.Tracer;
@@ -55,7 +56,8 @@ public class SessionFactory : ISessionFactory, IDisposable
                     TopicPrefetch = _prefetchPolicy,
                     DurableTopicPrefetch = _prefetchPolicy,
                     QueueBrowserPrefetch = _prefetchPolicy
-                }
+                },
+                RedeliveryPolicy = _options.RedeliveryPolicy
             };
             var connection =
                 await connectionFactory.CreateConnectionAsync(_options.Username,

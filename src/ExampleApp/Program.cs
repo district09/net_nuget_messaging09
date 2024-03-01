@@ -2,7 +2,6 @@ using ExampleApp.MessageHandlers;
 using ExampleApp.Models;
 using Messaging09.Amqp;
 using Messaging09.Amqp.Extensions.DependencyInjection.Extensions;
-using Messaging09.Amqp.Tracing;
 
 var builder = WebApplication.CreateBuilder(args);
 

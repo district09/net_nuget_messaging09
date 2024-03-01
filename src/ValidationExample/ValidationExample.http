@@ -1,6 +1,6 @@
 @ValidationExample_HostAddress = http://localhost:5228
 
-GET {{ValidationExample_HostAddress}}/weatherforecast/
+GET {{ValidationExample_HostAddress}}/msg/
 Accept: application/json
 
 ###

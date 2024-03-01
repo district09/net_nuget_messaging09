@@ -1,4 +1,6 @@
-﻿namespace Messaging09.Amqp.Config;
+﻿using Apache.NMS.Policies;
+
+namespace Messaging09.Amqp.Config;
 
 public class BrokerOptions
 {
@@ -8,4 +10,5 @@ public class BrokerOptions
     public string Password { get; set; }
     public int TimeoutSeconds { get; set; }
     public int PrefetchPolicy { get; set; } = 2;
+    public RedeliveryPolicy RedeliveryPolicy { get; set; }
 }
