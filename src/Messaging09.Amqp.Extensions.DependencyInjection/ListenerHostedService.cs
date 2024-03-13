@@ -8,15 +8,18 @@ internal class ListenerHostedService<TMessageType> : BackgroundService where TMe
     private readonly ILogger<ListenerHostedService<TMessageType>> _logger;
     private readonly ListenerFactory _listenerFactory;
     private readonly string _fqdn;
+    private readonly string? _selector;
     private IListener? _listener;
 
     public ListenerHostedService(ILogger<ListenerHostedService<TMessageType>> logger,
         ListenerFactory listenerFactory,
-        string fqdn)
+        string fqdn,
+        string? selector = null)
     {
         _logger = logger;
         _listenerFactory = listenerFactory;
         _fqdn = fqdn;
+        _selector = selector;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,7 +40,7 @@ internal class ListenerHostedService<TMessageType> : BackgroundService where TMe
     {
         _logger.LogInformation("Starting hosted service listener for {Fqdn}", _fqdn);
         _listener = _listenerFactory.GetListener<TMessageType>(_fqdn);
-        await _listener.StartListening();
+        await _listener.StartListening(_selector);
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)

@@ -12,88 +12,89 @@ namespace Messaging09.Amqp.Extensions.DependencyInjection;
 
 public class MessagingConfigBuilder : IMessagingConfigBuilder
 {
-    public IServiceCollection Services { get; }
+  public IServiceCollection Services { get; }
 
-    public MessagingConfigBuilder(IServiceCollection services)
+  public MessagingConfigBuilder(IServiceCollection services)
+  {
+    Services = services;
+    WithConfig(null);
+  }
+
+  public IMessagingConfigBuilder WithListener<TMessageType, THandlerType>(string fqdn, string? selector = null)
+    where TMessageType : class
+    where THandlerType : MessageHandler<TMessageType>
+  {
+    return WithListener<TMessageType, THandlerType, JsonTextMessageSerializer<TMessageType>>(fqdn, selector);
+  }
+
+  public IMessagingConfigBuilder WithListener<TMessageType, THandlerType, TSerializerType>(string fqdn,
+    string? selector = null)
+    where TMessageType : class
+    where THandlerType : MessageHandler<TMessageType>
+    where TSerializerType : class, IMessageSerializer<TMessageType>
+  {
+    Services.AddScoped<MessageHandler<TMessageType>, THandlerType>();
+
+    Services.AddSingleton<IHostedService>(provider =>
     {
-        Services = services;
-        WithConfig(null);
-    }
+      var logger = provider.GetRequiredService<ILogger<ListenerHostedService<TMessageType>>>();
+      var listenerFactory = provider.GetRequiredService<ListenerFactory>();
+      return new ListenerHostedService<TMessageType>(logger, listenerFactory, fqdn, selector);
+    });
+    return WithSerializer<TMessageType, TSerializerType>();
+  }
 
-    public IMessagingConfigBuilder WithListener<TMessageType, THandlerType>(string fqdn)
-        where TMessageType : class
-        where THandlerType : MessageHandler<TMessageType>
-    {
-        return WithListener<TMessageType, THandlerType, JsonTextMessageSerializer<TMessageType>>(fqdn);
-    }
+  public IMessagingConfigBuilder WithSerializer<TMessageType, TSerializerType>()
+    where TMessageType : class
+    where TSerializerType : class, IMessageSerializer<TMessageType>
+  {
+    Services.AddScoped<IMessageSerializer<TMessageType>, TSerializerType>();
+    return this;
+  }
 
-    public IMessagingConfigBuilder WithListener<TMessageType, THandlerType, TSerializerType>(string fqdn)
-        where TMessageType : class
-        where THandlerType : MessageHandler<TMessageType>
-        where TSerializerType : class, IMessageSerializer<TMessageType>
-    {
-        Services.AddScoped<MessageHandler<TMessageType>, THandlerType>();
+  public IMessagingConfigBuilder WithPlugin<TPluginType>()
+    where TPluginType : MessagingPlugin
+  {
+    Services.AddTransient<MessagingPlugin, TPluginType>();
+    return this;
+  }
 
-        Services.AddSingleton<IHostedService>(provider =>
-        {
-            var logger = provider.GetRequiredService<ILogger<ListenerHostedService<TMessageType>>>();
-            var listenerFactory = provider.GetRequiredService<ListenerFactory>();
-            return new ListenerHostedService<TMessageType>(logger, listenerFactory, fqdn);
-        });
-        return WithSerializer<TMessageType, TSerializerType>();
-    }
+  public IMessagingConfigBuilder WithPublisherForType<TMessageType>() where TMessageType : class
+  {
+    return WithPublisherForType<TMessageType, JsonTextMessageSerializer<TMessageType>>();
+  }
 
-    public IMessagingConfigBuilder WithSerializer<TMessageType, TSerializerType>()
-        where TMessageType : class
-        where TSerializerType : class, IMessageSerializer<TMessageType>
-    {
-        Services.AddScoped<IMessageSerializer<TMessageType>, TSerializerType>();
-        return this;
-    }
+  public IMessagingConfigBuilder WithPublisherForType<TMessageType, TSerializerType>()
+    where TMessageType : class
+    where TSerializerType : class, IMessageSerializer<TMessageType>
+  {
+    Services.AddScoped<IMessagePublisher, CorrelatedMessagePublisher>();
+    return WithSerializer<TMessageType, TSerializerType>();
+  }
 
-    public IMessagingConfigBuilder WithPlugin<TPluginType>()
-        where TPluginType : MessagingPlugin
-    {
-        Services.AddTransient<MessagingPlugin, TPluginType>();
-        return this;
-    }
+  [Obsolete("WithMessageHandling has been renamed to WithConfig for clarity")]
+  public IMessagingConfigBuilder WithMessageHandling(ConfigureMessageHandling? configAction = null)
+  {
+    return WithConfig(configAction);
+  }
 
-    public IMessagingConfigBuilder WithPublisherForType<TMessageType>() where TMessageType : class
-    {
-        return WithPublisherForType<TMessageType, JsonTextMessageSerializer<TMessageType>>();
-    }
+  public IMessagingConfigBuilder WithConfig(ConfigureMessageHandling? configAction = null)
+  {
+    var handlingConfig = new MessagingConfig();
+    var config = configAction?.Invoke(handlingConfig);
+    Services.Replace(ServiceDescriptor.Singleton(config ?? handlingConfig));
+    return this;
+  }
 
-    public IMessagingConfigBuilder WithPublisherForType<TMessageType, TSerializerType>()
-        where TMessageType : class
-        where TSerializerType : class, IMessageSerializer<TMessageType>
-    {
-        Services.AddScoped<IMessagePublisher, CorrelatedMessagePublisher>();
-        return WithSerializer<TMessageType, TSerializerType>();
-    }
+  public IMessagingConfigBuilder WithTracer<TTracer>() where TTracer : ITrace, new()
+  {
+    Tracer.Trace = new TTracer();
+    return this;
+  }
 
-    [Obsolete("WithMessageHandling has been renamed to WithConfig for clarity")]
-    public IMessagingConfigBuilder WithMessageHandling(ConfigureMessageHandling? configAction = null)
-    {
-        return WithConfig(configAction);
-    }
-
-    public IMessagingConfigBuilder WithConfig(ConfigureMessageHandling? configAction = null)
-    {
-        var handlingConfig = new MessagingConfig();
-        var config = configAction?.Invoke(handlingConfig);
-        Services.Replace(ServiceDescriptor.Singleton(config ?? handlingConfig));
-        return this;
-    }
-
-    public IMessagingConfigBuilder WithTracer<TTracer>() where TTracer : ITrace, new()
-    {
-        Tracer.Trace = new TTracer();
-        return this;
-    }
-
-    public IMessagingConfigBuilder WithDotnetLogger()
-    {
-        Services.AddTransient<IStartupFilter, LogStartupFilter>();
-        return this;
-    }
+  public IMessagingConfigBuilder WithDotnetLogger()
+  {
+    Services.AddTransient<IStartupFilter, LogStartupFilter>();
+    return this;
+  }
 }
