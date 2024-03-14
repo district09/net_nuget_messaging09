@@ -54,8 +54,9 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
 
     using var activity = StartActivity(message, handler.GetType().Name);
 
-    correlationContextAccessor.CorrelationId = message.NMSCorrelationID ?? Guid.NewGuid().ToString("D");
-    using var logScope = SetupLogScope(message);
+    var correlationId = message.NMSCorrelationID ?? Guid.NewGuid().ToString("D");
+    correlationContextAccessor.CorrelationId = correlationId;
+    using var logScope = SetupLogScope(message, correlationId);
 
     try
     {
@@ -131,13 +132,13 @@ public sealed class ScopedMessageListener<TMessageType> : IListener, IDisposable
     _consumer?.Dispose();
   }
 
-  private MessageLogScope SetupLogScope(IMessage message)
+  private MessageLogScope SetupLogScope(IMessage message, string correlationId)
   {
     return new MessageLogScope()
     {
       MessageLoggerScope = _logger.BeginScope(new Dictionary<string, object>()
       {
-        { "CorrelationId", message.NMSCorrelationID ?? Guid.NewGuid().ToString("D") },
+        { "CorrelationId", correlationId },
         { "MessageType", message.NMSType },
         { "MessageDestination", message.NMSDestination }
       })

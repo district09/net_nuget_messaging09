@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageProjectUrl>https://github.com/district09/net_nuget_messaging09</PackageProjectUrl>
@@ -14,7 +14,7 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <PackageIconUrl>https://district09.gent/themes/custom/district09/build/img/svg/logo.svg</PackageIconUrl>
-        <Version>1.5.4</Version>
+        <Version>1.6.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
