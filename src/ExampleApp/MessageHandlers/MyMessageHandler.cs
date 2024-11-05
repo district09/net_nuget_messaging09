@@ -19,6 +19,6 @@ public class MyMessageHandler : MessageHandler<MessageViewModel>
         _logger.LogInformation("message received with count {Count}, correlation: {Correlation}",
             envelope.Message.Count, envelope.Original.NMSCorrelationID);
         //await Task.Delay(1000);
-        return MessageOutcome.Ack;
+        return MessageOutcome.FailedUndeliverable;
     }
 }
